@@ -64,7 +64,7 @@ namespace Movies.Application.Repositories
         {
             using var connection = await dbConnectionFactory.CreateConnectionAsync(token);
 
-            var movie = await connection.QuerySingleOrDefaultAsync<Movie>(new CommandDefinition("""Select * from movies where slug = @slug""", new { slug }, , cancellationToken: token));
+            var movie = await connection.QuerySingleOrDefaultAsync<Movie>(new CommandDefinition("""Select * from movies where slug = @slug""", new { slug }, cancellationToken: token));
 
             if (movie is null)
             {

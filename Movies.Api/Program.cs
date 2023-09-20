@@ -1,9 +1,32 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Movies.Api.Mapping;
 using Movies.Application;
 using Movies.Application.Database;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-var config = builder.Configuration; 
+var config = builder.Configuration;
+
+// Add authentication 
+builder.Services.AddAuthentication(x =>
+{
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(x => 
+{
+    x.TokenValidationParameters = new TokenValidationParameters
+    {
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]!)),
+        ValidateIssuerSigningKey = true, // has to be set other wise the signer is not validated 
+        ValidateLifetime = true, // check the liftime of the JWT, if expired should also expire permissions 
+        ValidAudience = config["Jwt:Audience"]!,
+        ValidIssuer = config["Jwt:Issuer"],
+        ValidateIssuer = true, // is this coming from the right person ?
+        ValidateAudience = true, // is this token targeted to the right API ?
+    };
+});
+
+builder.Services.AddAuthorization(); 
 
 // Add services to the container.
 
@@ -30,6 +53,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();    
 app.UseAuthorization();
 
 app.UseMiddleware<ValidationMappingMiddleware>(); 
