@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Movies.Api;
 using Movies.Api.Mapping;
 using Movies.Application;
 using Movies.Application.Database;
@@ -26,7 +27,12 @@ builder.Services.AddAuthentication(x =>
     };
 });
 
-builder.Services.AddAuthorization(); 
+builder.Services.AddAuthorization(x => 
+{
+    // add rules based on information inside the JWT
+    // here a user is an admin, if the claim admin is set to true
+    x.AddPolicy(AuthConstants.AdminUserPolicyName, p => p.RequireClaim(AuthConstants.AdminUserClaimName, "true")); 
+}); 
 
 // Add services to the container.
 
