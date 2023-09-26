@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Movies.Api.Auth;
 using Movies.Api.Mapping;
 using Movies.Application.Repositories;
 using Movies.Application.Services;
@@ -34,16 +35,20 @@ namespace Movies.Api.Controllers
         [HttpGet(ApiEndpoints.Movies.Get)]
         public async Task<IActionResult> Get([FromRoute]string idOrSlug, CancellationToken cancellationToken)
         {
-            var movie = Guid.TryParse(idOrSlug, out var id) ? await movieService.GetByIdAsync(id, cancellationToken) 
-                                                            : await movieService.GetBySlugAsync(idOrSlug, cancellationToken);
+            var userId = HttpContext.GetUserId();
+
+            var movie = Guid.TryParse(idOrSlug, out var id) ? await movieService.GetByIdAsync(id, userId, cancellationToken) 
+                                                            : await movieService.GetBySlugAsync(idOrSlug, userId, cancellationToken);
 
             return movie is null ? NotFound() : Ok(movie.ToResponse()); 
         }
 
         [HttpGet(ApiEndpoints.Movies.GetAll)]
         public async Task<IActionResult> GetAll()
-        { 
-            var movies = await movieService.GetAllAsync();
+        {
+            var userId = HttpContext.GetUserId();
+
+            var movies = await movieService.GetAllAsync(userId);
 
             return Ok(movies.ToResponse());
         }
@@ -52,9 +57,11 @@ namespace Movies.Api.Controllers
         [HttpPut(ApiEndpoints.Movies.Update)]
         public async Task<IActionResult> Update([FromRoute]Guid id, [FromBody]UpdateMovieRequest movieRequest, CancellationToken cancellationToken)
         {
+            var userId = HttpContext.GetUserId();
+
             var movie = movieRequest.ToMovie(id); 
 
-            var updatedMovie = await movieService.UpdateAsync(movie, cancellationToken);
+            var updatedMovie = await movieService.UpdateAsync(movie, userId, cancellationToken);
 
             return updatedMovie is not null ? Ok(movie.ToResponse()) : NotFound(); 
         }

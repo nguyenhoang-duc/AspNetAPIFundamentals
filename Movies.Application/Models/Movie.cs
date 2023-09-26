@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 
 namespace Movies.Application.Models
 {
@@ -14,6 +15,10 @@ namespace Movies.Application.Models
         public required int YearOfRelease { get; set; }
 
         public required List<string> Genres { get; init; } = new();
+
+        public float? Rating { get; set; }
+
+        public int? UserRating { get; set; }
 
         private string GenerateSlug()
         {
