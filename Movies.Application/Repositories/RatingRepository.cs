@@ -1,10 +1,5 @@
 ﻿using Dapper;
 using Movies.Application.Database;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Movies.Application.Repositories
 {
@@ -41,6 +36,20 @@ namespace Movies.Application.Repositories
                     from ratings r 
                     where movieId = @movieId
                 """, new { movieId, userId }, cancellationToken: cancellationToken));
+        }
+
+        public async Task<bool> RateMovieAsync(Guid movieId, int rating, Guid userId, CancellationToken cancellationToken = default)
+        {
+            using var connection = await dbConnectionFactory.CreateConnectionAsync();
+
+            var affectedRows = await connection.ExecuteAsync(new CommandDefinition("""
+                INSERT INTO ratings(userid, movieid, rating)
+                VALUES (@userId, @movieId, @rating)
+                on conflict (userid, movieid) do update
+                    set rating = @rating
+                """, new { userId, movieId, rating }, cancellationToken: cancellationToken));
+
+            return affectedRows > 0; 
         }
     }
 }

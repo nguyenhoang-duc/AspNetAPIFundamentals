@@ -14,6 +14,7 @@ namespace Movies.Application
             services.AddSingleton<IMovieRepository, MovieRepository>(); // defines connection to the database
             services.AddSingleton<IMovieService, MovieService>(); // defines the business logic for the movies
             services.AddSingleton<IRatingRepository, RatingRepository>();
+            services.AddSingleton<IRatingService, RatingService>();
             services.AddValidatorsFromAssemblyContaining<IApplicationMarker>(ServiceLifetime.Singleton);
 
             return services; 

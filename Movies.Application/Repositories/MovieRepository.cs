@@ -48,7 +48,7 @@ namespace Movies.Application.Repositories
 
             var movie = await connection.QuerySingleOrDefaultAsync<Movie>(new CommandDefinition("""
                 SELECT m.*, round(avg(r.rating), 1) as rating, myr.rating as userrating
-                FROM movies 
+                FROM movies m
                 LEFT JOIN ratings r on m.id = r.movieid 
                 LEFT JOIN ratings myr on m.id = myr.movieid and myr.userid = @userId
                 where id = @id
