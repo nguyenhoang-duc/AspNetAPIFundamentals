@@ -42,11 +42,29 @@ namespace Movies.Api.Mapping
             };
         }
 
+        public static MovieRatingResponse ToResponse(this MovieRating movieRating)
+        {
+            return new MovieRatingResponse
+            {
+                MovieId = movieRating.MovieId,
+                Slug = movieRating.Slug,
+                Rating = movieRating.Rating,
+            };
+        }
+
         public static MoviesResponse ToResponse(this IEnumerable<Movie> movies)
         {
             return new MoviesResponse
             {
                 Items = movies.Select(m => m.ToResponse()),
+            };
+        }
+
+        public static MovieRatingsResponse ToResponse(this IEnumerable<MovieRating> movieRatings)
+        {
+            return new MovieRatingsResponse
+            {
+                Ratings = movieRatings.Select(m => m.ToResponse()),
             };
         }
     }
