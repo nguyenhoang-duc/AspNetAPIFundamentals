@@ -67,5 +67,21 @@ namespace Movies.Api.Mapping
                 Ratings = movieRatings.Select(m => m.ToResponse()),
             };
         }
+
+        public static GetAllMoviesOptions ToOptions(this GetAllMoviesRequest request)
+        {
+            return new GetAllMoviesOptions
+            {
+                YearOfRelease = request.Year, 
+                Title = request.Title,
+            };
+        }
+
+        public static GetAllMoviesOptions WithUserId(this GetAllMoviesOptions options, Guid userId)
+        { 
+            options.UserId = userId;
+
+            return options;
+        }
     }
 }
