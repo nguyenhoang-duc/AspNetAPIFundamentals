@@ -17,6 +17,7 @@
             public const string Delete = $"{Base}/{{id:guid}}";
 
             public const string Rate = $"{Base}/{{id:guid}}/ratings"; 
+            public const string DeleteRating = $"{Base}/{{id:guid}}/ratings"; 
             public const string GetRatingsOfMovie = $"{Base}/{{id:guid}}/ratings"; 
         }
 
