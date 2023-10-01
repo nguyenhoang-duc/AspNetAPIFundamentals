@@ -70,10 +70,16 @@ namespace Movies.Api.Mapping
 
         public static GetAllMoviesOptions ToOptions(this GetAllMoviesRequest request)
         {
+            var sortField = request.SortBy?.Trim('+', '-');
+            var sortOrder = request.SortBy is null ? SortOrder.Unsorted :
+                            request.SortBy.StartsWith("-") ? SortOrder.Descending : SortOrder.Ascending;
+
             return new GetAllMoviesOptions
             {
                 YearOfRelease = request.Year, 
                 Title = request.Title,
+                SortField = sortField, 
+                SortOrder = sortOrder,
             };
         }
 

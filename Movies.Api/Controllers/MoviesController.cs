@@ -43,6 +43,7 @@ namespace Movies.Api.Controllers
             return movie is null ? NotFound() : Ok(movie.ToResponse()); 
         }
 
+        [Authorize]
         [HttpGet(ApiEndpoints.Movies.GetAll)]
         public async Task<IActionResult> GetAll([FromQuery]GetAllMoviesRequest getAllMoviesRequest, CancellationToken cancellationToken)
         {

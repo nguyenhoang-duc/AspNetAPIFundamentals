@@ -98,7 +98,17 @@ namespace Movies.Application.Repositories
         {
             using var connection = await dbConnectionFactory.CreateConnectionAsync(token);
 
-            var result = await connection.QueryAsync(new CommandDefinition("""
+            var orderClause = string.Empty;
+
+            if (options.SortField is not null)
+            {
+                orderClause = $"""
+                    , m.{options.SortField} 
+                    order by m.{options.SortField} {(options.SortOrder == SortOrder.Descending ? "DESC" : "ASC")}
+                    """;
+            }
+
+            var result = await connection.QueryAsync(new CommandDefinition($"""
                 Select m.*, string_agg(distinct g.name, ',') as genres, round(avg(r.rating), 1) as rating, myr.rating as userrating 
                 from movies m 
                 left join genres g on m.id = g.movieid
@@ -107,6 +117,7 @@ namespace Movies.Application.Repositories
                 where (@title is null or m.title like ('%' || @title || '%'))
                 and (@yearofrelease is null or m.yearofrelease = @yearofrelease)
                 group by id, userrating
+                {orderClause}
                 """, new { userId = options.UserId, title = options.Title, yearofrelease = options.YearOfRelease }, cancellationToken: token));
 
             return result.Select(x => new Movie
