@@ -52,11 +52,14 @@ namespace Movies.Api.Mapping
             };
         }
 
-        public static MoviesResponse ToResponse(this IEnumerable<Movie> movies)
+        public static MoviesResponse ToResponse(this IEnumerable<Movie> movies, int page, int pageSize, int totalCount)
         {
             return new MoviesResponse
             {
                 Items = movies.Select(m => m.ToResponse()),
+                Page = page, 
+                PageSize = pageSize, 
+                Total = totalCount
             };
         }
 
@@ -80,6 +83,8 @@ namespace Movies.Api.Mapping
                 Title = request.Title,
                 SortField = sortField, 
                 SortOrder = sortOrder,
+                Page = request.Page,
+                PageSize = request.PageSize,
             };
         }
 

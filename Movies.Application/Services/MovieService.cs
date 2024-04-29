@@ -1,11 +1,6 @@
 ﻿using FluentValidation;
 using Movies.Application.Models;
 using Movies.Application.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Movies.Application.Services
 {
@@ -51,6 +46,11 @@ namespace Movies.Application.Services
         public Task<Movie?> GetBySlugAsync(string slug, Guid? userId = default, CancellationToken token = default)
         {
             return movieRepository.GetBySlugAsync(slug, userId, token);
+        }
+
+        public Task<int> GetCountAsync(string? title, int? yearOfRelease, CancellationToken token = default)
+        {
+            return movieRepository.GetCountAsync(title, yearOfRelease, token);
         }
 
         public async Task<Movie?> UpdateAsync(Movie movie, Guid? userId = default, CancellationToken token = default)
