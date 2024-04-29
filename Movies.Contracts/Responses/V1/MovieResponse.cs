@@ -1,4 +1,4 @@
-﻿namespace Movies.Contracts.Responses
+﻿namespace Movies.Contracts.Responses.V1
 {
     public class MovieResponse
     {
@@ -6,7 +6,7 @@
 
         public required string Title { get; init; } = string.Empty;
 
-        public required string Slug { get; init; } = string.Empty; 
+        public required string Slug { get; init; } = string.Empty;
 
         public float? Rating { get; init; }
 
