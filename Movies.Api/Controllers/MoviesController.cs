@@ -5,6 +5,7 @@ using Movies.Api.Mapping;
 using Movies.Application.Repositories;
 using Movies.Application.Services;
 using Movies.Contracts.Requests;
+using Movies.Contracts.Responses;
 
 namespace Movies.Api.Controllers
 {
@@ -33,14 +34,42 @@ namespace Movies.Api.Controllers
         }
 
         [HttpGet(ApiEndpoints.Movies.Get)]
-        public async Task<IActionResult> Get([FromRoute]string idOrSlug, CancellationToken cancellationToken)
+        public async Task<IActionResult> Get([FromRoute]string idOrSlug, [FromServices] LinkGenerator linkGenerator, CancellationToken cancellationToken)
         {
             var userId = HttpContext.GetUserId();
 
             var movie = Guid.TryParse(idOrSlug, out var id) ? await movieService.GetByIdAsync(id, userId, cancellationToken) 
                                                             : await movieService.GetBySlugAsync(idOrSlug, userId, cancellationToken);
 
-            return movie is null ? NotFound() : Ok(movie.ToResponse()); 
+            if (movie is null)
+            {
+                return NotFound(); 
+            }
+
+            var movieResponse = movie.ToResponse();
+
+            movieResponse.Links.Add(new Link
+            {
+                Href = linkGenerator.GetPathByAction(HttpContext, nameof(Get), values: new { idOrSlug = movie.Id }) ?? string.Empty,
+                Rel = "self",
+                Type = "GET"
+            });
+
+            movieResponse.Links.Add(new Link
+            {
+                Href = linkGenerator.GetPathByAction(HttpContext, nameof(Update), values: new { idOrSlug = movie.Id }) ?? string.Empty,
+                Rel = "self",
+                Type = "PUT"
+            });
+
+            movieResponse.Links.Add(new Link
+            {
+                Href = linkGenerator.GetPathByAction(HttpContext, nameof(Delete), values: new { idOrSlug = movie.Id }) ?? string.Empty,
+                Rel = "self",
+                Type = "DELETE"
+            });
+
+            return Ok(movieResponse); 
         }
 
         [Authorize]
