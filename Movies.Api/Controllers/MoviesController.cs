@@ -10,6 +10,7 @@ using Movies.Contracts.Requests;
 namespace Movies.Api.Controllers
 {
     [ApiVersion(1.0)]
+    [ApiVersion(2.0)]
     [ApiController]
     public class MoviesController : ControllerBase
     {
@@ -34,6 +35,7 @@ namespace Movies.Api.Controllers
             return CreatedAtAction(nameof(GetV1), new { idOrSlug = movie.Id }, movie); 
         }
 
+        [MapToApiVersion(1.0)]
         [HttpGet(ApiEndpoints.Movies.Get)]
         public async Task<IActionResult> GetV1([FromRoute]string idOrSlug, CancellationToken cancellationToken)
         {
@@ -44,7 +46,20 @@ namespace Movies.Api.Controllers
 
             return movie is null ? NotFound() : Ok(movie.ToResponse()); 
         }
-        
+
+        [MapToApiVersion(2.0)]
+        [HttpGet(ApiEndpoints.Movies.Get)]
+        public async Task<IActionResult> GetV2([FromRoute] string idOrSlug, CancellationToken cancellationToken)
+        {
+            var userId = HttpContext.GetUserId();
+
+            var movie = Guid.TryParse(idOrSlug, out var id) ? await movieService.GetByIdAsync(id, userId, cancellationToken)
+                                                            : await movieService.GetBySlugAsync(idOrSlug, userId, cancellationToken);
+
+            return movie is null ? NotFound() : Ok(movie.ToResponse());
+        }
+
+
         [Authorize]
         [HttpGet(ApiEndpoints.Movies.GetAll)]
         public async Task<IActionResult> GetAll([FromQuery]GetAllMoviesRequest getAllMoviesRequest, CancellationToken cancellationToken)
