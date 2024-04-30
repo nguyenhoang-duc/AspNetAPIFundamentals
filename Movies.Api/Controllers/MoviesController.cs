@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Movies.Api.Auth;
 using Movies.Api.Mapping;
@@ -8,6 +9,7 @@ using Movies.Contracts.Requests;
 
 namespace Movies.Api.Controllers
 {
+    [ApiVersion(1.0)]
     [ApiController]
     public class MoviesController : ControllerBase
     {
@@ -29,11 +31,11 @@ namespace Movies.Api.Controllers
 
             var response = movie.ToResponse();
 
-            return CreatedAtAction(nameof(Get), new { idOrSlug = movie.Id }, movie); 
+            return CreatedAtAction(nameof(GetV1), new { idOrSlug = movie.Id }, movie); 
         }
 
         [HttpGet(ApiEndpoints.Movies.Get)]
-        public async Task<IActionResult> Get([FromRoute]string idOrSlug, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetV1([FromRoute]string idOrSlug, CancellationToken cancellationToken)
         {
             var userId = HttpContext.GetUserId();
 
@@ -42,7 +44,7 @@ namespace Movies.Api.Controllers
 
             return movie is null ? NotFound() : Ok(movie.ToResponse()); 
         }
-
+        
         [Authorize]
         [HttpGet(ApiEndpoints.Movies.GetAll)]
         public async Task<IActionResult> GetAll([FromQuery]GetAllMoviesRequest getAllMoviesRequest, CancellationToken cancellationToken)

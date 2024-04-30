@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Movies.Api.Auth;
@@ -39,9 +40,20 @@ builder.Services.AddAuthorization(x =>
         c.User.HasClaim(m => m is { Type: AuthConstants.TrustedMemberClaimName, Value: "true"}) ||
         c.User.HasClaim(m => m is { Type: AuthConstants.AdminUserClaimName, Value: "true" })
     ));
-}); 
+});
 
 // Add services to the container.
+builder.Services.AddApiVersioning(options => 
+{
+    options.DefaultApiVersion = new ApiVersion(1.0);
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.ReportApiVersions = true;
+    options.ApiVersionReader = new MediaTypeApiVersionReader("api-version");
+}).AddApiExplorer(options => 
+{
+    options.GroupNameFormat = "'v'V";
+    options.SubstituteApiVersionInUrl = true;
+}).AddMvc();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
