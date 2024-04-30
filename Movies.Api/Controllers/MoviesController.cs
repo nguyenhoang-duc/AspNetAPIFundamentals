@@ -40,6 +40,7 @@ namespace Movies.Api.Controllers
 
         [MapToApiVersion(1.0)]
         [HttpGet(ApiEndpoints.Movies.Get)]
+        [ResponseCache(Duration = 30, VaryByHeader = "Accept, Accept-Encoding", Location = ResponseCacheLocation.Any)]
         [ProducesResponseType(typeof(MovieResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetV1([FromRoute]string idOrSlug, CancellationToken cancellationToken)
@@ -54,6 +55,7 @@ namespace Movies.Api.Controllers
 
         [MapToApiVersion(2.0)]
         [HttpGet(ApiEndpoints.Movies.Get)]
+        [ResponseCache(Duration = 30, VaryByQueryKeys = new string[] { "title", "year", "sortBy", "page", "pageSize" }, VaryByHeader = "Accept, Accept-Encoding", Location = ResponseCacheLocation.Any)]
         [ProducesResponseType(typeof(MovieResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetV2([FromRoute] string idOrSlug, CancellationToken cancellationToken)

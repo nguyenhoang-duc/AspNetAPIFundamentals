@@ -60,9 +60,10 @@ builder.Services.AddApiVersioning(options =>
 }).AddMvc();
 
 builder.Services.AddHealthChecks()
-    .AddCheck<DatabaseHealthCheck>("Database"); 
+    .AddCheck<DatabaseHealthCheck>("Database");
 
 builder.Services.AddControllers();
+builder.Services.AddResponseCaching(); 
 builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddSwaggerGen(x => x.OperationFilter<SwaggerDefaultValues>());
@@ -95,6 +96,8 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();    
 app.UseAuthorization();
+
+app.UseResponseCaching(); 
 
 app.UseMiddleware<ValidationMappingMiddleware>(); 
 app.MapControllers();
