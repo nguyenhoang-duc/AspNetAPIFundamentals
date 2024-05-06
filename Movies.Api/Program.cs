@@ -63,7 +63,16 @@ builder.Services.AddHealthChecks()
     .AddCheck<DatabaseHealthCheck>("Database");
 
 builder.Services.AddControllers();
-builder.Services.AddResponseCaching(); 
+builder.Services.AddOutputCache(x => 
+{
+    x.AddBasePolicy(c => c.Cache());
+    x.AddPolicy("MoviesCache", c =>
+    {
+        c.Cache().Expire(TimeSpan.FromMinutes(1))
+         .SetVaryByQuery(new[] { "title", "year", "sortBy", "page", "pageSize" })
+         .Tag("movies");
+    });
+}); 
 builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddSwaggerGen(x => x.OperationFilter<SwaggerDefaultValues>());
@@ -80,7 +89,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
+    app.UseSwagger(); 
     app.UseSwaggerUI(x => 
     {
         foreach (var description in app.DescribeApiVersions())
@@ -97,7 +106,8 @@ app.UseHttpsRedirection();
 app.UseAuthentication();    
 app.UseAuthorization();
 
-app.UseResponseCaching(); 
+//app.UseCors(); 
+app.UseOutputCache(); 
 
 app.UseMiddleware<ValidationMappingMiddleware>(); 
 app.MapControllers();
