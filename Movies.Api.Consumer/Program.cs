@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Movies.Api.Consumer;
 using Movies.Api.Sdk;
 using Movies.Contracts.Requests;
 using Refit;
@@ -6,9 +7,12 @@ using System.Text.Json;
 
 var services = new ServiceCollection();
 
-services.AddRefitClient<IMoviesApi>(x => new RefitSettings
+services
+    .AddHttpClient()
+    .AddSingleton<AuthTokenProvider>()
+    .AddRefitClient<IMoviesApi>(s => new RefitSettings
 {
-    AuthorizationHeaderValueGetter = (_, _) => Task.FromResult("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIyYmM4MzdmYy00MzAxLTQxYTItYWJjMi1hYzZjYzYyZmI3YWEiLCJzdWIiOiJob2FuZy5kMTk5N0BnbWFpbC5jb20iLCJlbWFpbCI6ImhvYW5nLmQxOTk3QGdtYWlsLmNvbSIsInVzZXJpZCI6ImQ4NTY2ZGUzLWIxYTYtNGE5Yi1iODQyLThlMzg4N2E4MmU0MSIsImFkbWluIjp0cnVlLCJ0cnVzdGVkX21lbWJlciI6dHJ1ZSwibmJmIjoxNzE1MDI2MjYyLCJleHAiOjE3MTUwNTUwNjIsImlhdCI6MTcxNTAyNjI2MiwiaXNzIjoiaHR0cHM6Ly9pZC5uaWNrY2hhcHNhcy5jb20iLCJhdWQiOiJodHRwczovL21vdmllcy5uaWNrY2hhcHNhcy5jb20ifQ.lwq7C9QeAxqrljbYtZ7D08jDDlkFjQ2xvEjRAr_38AY")
+    AuthorizationHeaderValueGetter = (_, _) => s.GetRequiredService<AuthTokenProvider>().GetTokenAsync()
 })
 .ConfigureHttpClient(x => x.BaseAddress = new Uri("https://localhost:5001")); 
 
