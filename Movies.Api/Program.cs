@@ -59,6 +59,8 @@ builder.Services.AddApiVersioning(options =>
     options.SubstituteApiVersionInUrl = true;
 }).AddMvc();
 
+builder.Services.AddScoped<ApiKeyAuthorizationFilter>();
+
 builder.Services.AddHealthChecks()
     .AddCheck<DatabaseHealthCheck>("Database");
 

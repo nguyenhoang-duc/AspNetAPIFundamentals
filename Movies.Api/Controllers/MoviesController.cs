@@ -26,7 +26,8 @@ namespace Movies.Api.Controllers
         }
 
         // Allow only admins to update a movie
-        [Authorize(AuthConstants.TrustedMemberPolicyName)]
+        // [Authorize(AuthConstants.TrustedMemberPolicyName)]
+        [ServiceFilter(typeof(ApiKeyAuthorizationFilter))]
         [HttpPost(ApiEndpoints.Movies.Create)]
         [ProducesResponseType(typeof(MovieResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ValidationFailureResponse), StatusCodes.Status400BadRequest)]
