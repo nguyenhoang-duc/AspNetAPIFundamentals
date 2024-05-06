@@ -11,6 +11,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Movies.Api", "Movies.Api\Mo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.Api", "Identity.Api\Identity.Api.csproj", "{05A8A664-7B20-4D07-8B27-892C5394A59E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Movies.Api.Sdk", "Movies.Api.Sdk\Movies.Api.Sdk.csproj", "{2A39FF08-F42A-497C-951F-38D0B7E41874}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Movies.Api.Consumer", "Movies.Api.Consumer\Movies.Api.Consumer.csproj", "{0E5CA1A1-577C-4E68-9A4E-564D928DF2AA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{05A8A664-7B20-4D07-8B27-892C5394A59E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{05A8A664-7B20-4D07-8B27-892C5394A59E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{05A8A664-7B20-4D07-8B27-892C5394A59E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A39FF08-F42A-497C-951F-38D0B7E41874}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A39FF08-F42A-497C-951F-38D0B7E41874}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A39FF08-F42A-497C-951F-38D0B7E41874}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A39FF08-F42A-497C-951F-38D0B7E41874}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E5CA1A1-577C-4E68-9A4E-564D928DF2AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E5CA1A1-577C-4E68-9A4E-564D928DF2AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E5CA1A1-577C-4E68-9A4E-564D928DF2AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E5CA1A1-577C-4E68-9A4E-564D928DF2AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
