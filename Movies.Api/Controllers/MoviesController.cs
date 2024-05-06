@@ -26,8 +26,7 @@ namespace Movies.Api.Controllers
         }
 
         // Allow only admins to update a movie
-        // [Authorize(AuthConstants.TrustedMemberPolicyName)]
-        [ServiceFilter(typeof(ApiKeyAuthorizationFilter))]
+        [Authorize(AuthConstants.TrustedMemberPolicyName)]
         [HttpPost(ApiEndpoints.Movies.Create)]
         [ProducesResponseType(typeof(MovieResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ValidationFailureResponse), StatusCodes.Status400BadRequest)]
@@ -74,6 +73,7 @@ namespace Movies.Api.Controllers
             return movie is null ? NotFound() : Ok(movie.ToResponse());
         }
 
+        [Authorize]
         [HttpGet(ApiEndpoints.Movies.GetAll)]
         [OutputCache(PolicyName = "MoviesCache")]
         [ProducesResponseType(typeof(MoviesResponse), StatusCodes.Status200OK)]

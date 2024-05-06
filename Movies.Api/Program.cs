@@ -36,7 +36,10 @@ builder.Services.AddAuthorization(x =>
 {
     // add rules based on information inside the JWT
     // here a user is an admin, if the claim admin is set to true
-    x.AddPolicy(AuthConstants.AdminUserPolicyName, p => p.RequireClaim(AuthConstants.AdminUserClaimName, "true"));
+    // x.AddPolicy(AuthConstants.AdminUserPolicyName, p => p.RequireClaim(AuthConstants.AdminUserClaimName, "true"));
+
+    // Adding a requirement allows to have more compolex authorization 
+    x.AddPolicy(AuthConstants.AdminUserPolicyName, p => p.AddRequirements(new AdminAuthRequirement(config["ApiKey"]!)));
 
     // Require Assertion allows for more complex policy description 
     // In this case a trusted member is an admin or a user with trusted member claim
@@ -58,8 +61,6 @@ builder.Services.AddApiVersioning(options =>
     options.GroupNameFormat = "'v'V";
     options.SubstituteApiVersionInUrl = true;
 }).AddMvc();
-
-builder.Services.AddScoped<ApiKeyAuthorizationFilter>();
 
 builder.Services.AddHealthChecks()
     .AddCheck<DatabaseHealthCheck>("Database");
