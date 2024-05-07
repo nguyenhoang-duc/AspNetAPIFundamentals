@@ -19,7 +19,7 @@ namespace Movies.Api.Endpoints.Movies
                                                                 : await movieService.GetBySlugAsync(idOrSlug, userId, token);
 
                 return movie is null ? Results.NotFound() : TypedResults.Ok(movie.ToResponse());
-            });
+            }).WithName(Name);
 
             return app; 
         }
