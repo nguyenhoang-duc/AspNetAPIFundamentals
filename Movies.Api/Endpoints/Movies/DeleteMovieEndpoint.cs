@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.OutputCaching;
+using Movies.Api.Auth;
 using Movies.Application.Services;
 
 namespace Movies.Api.Endpoints.Movies
@@ -9,18 +10,22 @@ namespace Movies.Api.Endpoints.Movies
 
         public static IEndpointRouteBuilder MapDeleteMovie(this IEndpointRouteBuilder app)
         {
-            app.MapDelete(ApiEndpoints.Movies.Delete, async (
+            app.MapDelete(ApiEndpoints.Movies.Delete, async 
+            (
                 Guid id, 
                 IMovieService movieService,
                 IOutputCacheStore outputCacheStore, 
                 HttpContext httpContext, 
-                CancellationToken token) =>
+                CancellationToken token
+            ) =>
             {
                 var deleted = await movieService.DeleteByIdAsync(id, token);
                 await outputCacheStore.EvictByTagAsync("movies", token);
 
                 return deleted ? TypedResults.Ok() : Results.NotFound();
-            }).WithName(Name);
+            })
+                .WithName(Name)
+                .RequireAuthorization(AuthConstants.AdminUserPolicyName);
 
             return app; 
         }

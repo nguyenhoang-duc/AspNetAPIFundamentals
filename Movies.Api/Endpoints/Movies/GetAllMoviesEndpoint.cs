@@ -20,7 +20,7 @@ namespace Movies.Api.Endpoints.Movies
             {
                 var userId = httpContext.GetUserId();
 
-                var options = getAllMoviesRequest.ToOptions().WithUserId(userId!.Value);
+                var options = getAllMoviesRequest.ToOptions().WithUserId(userId?.Value);
 
                 var movies = await movieService.GetAllAsync(options, cancellationToken);
 

@@ -10,7 +10,8 @@ namespace Movies.Api.Endpoints.Ratings
 
         public static IEndpointRouteBuilder MapGetUserRatings(this IEndpointRouteBuilder app)
         {
-            app.MapGet(ApiEndpoints.Ratings.GetUserRatings, async (
+            app.MapGet(ApiEndpoints.Ratings.GetUserRatings, async 
+            (
                 HttpContext httpContext, 
                 IRatingService ratingService, 
                 CancellationToken token
@@ -21,7 +22,9 @@ namespace Movies.Api.Endpoints.Ratings
                 var movieRatings = await ratingService.GetRatingsForUserAsync(userId!.Value, token);
 
                 return TypedResults.Ok(movieRatings.ToResponse());
-            }).WithName(Name);  
+            })
+                .WithName(Name)
+                .RequireAuthorization();  
 
             return app; 
         }

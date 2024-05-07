@@ -88,7 +88,7 @@ namespace Movies.Api.Mapping
             };
         }
 
-        public static GetAllMoviesOptions WithUserId(this GetAllMoviesOptions options, Guid userId)
+        public static GetAllMoviesOptions WithUserId(this GetAllMoviesOptions options, Guid? userId)
         { 
             options.UserId = userId;
 

@@ -12,7 +12,8 @@ namespace Movies.Api.Endpoints.Movies
 
         public static IEndpointRouteBuilder MapUpdateMovie(this IEndpointRouteBuilder app)
         {
-            app.MapPut(ApiEndpoints.Movies.Update, async (
+            app.MapPut(ApiEndpoints.Movies.Update, async 
+            (
                 Guid id, 
                 UpdateMovieRequest movieRequest, 
                 HttpContext httpContext, 
@@ -30,7 +31,9 @@ namespace Movies.Api.Endpoints.Movies
                 await outputCacheStore.EvictByTagAsync("movies", cancellationToken);
 
                 return updatedMovie is not null ? TypedResults.Ok(movie.ToResponse()) : Results.NotFound();
-            }).WithName(Name);
+            })
+                .WithName(Name)
+                .RequireAuthorization(AuthConstants.TrustedMemberPolicyName);
 
             return app; 
         }

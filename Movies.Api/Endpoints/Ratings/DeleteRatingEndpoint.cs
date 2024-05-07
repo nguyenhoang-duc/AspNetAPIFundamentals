@@ -9,7 +9,8 @@ namespace Movies.Api.Endpoints.Ratings
 
         public static IEndpointRouteBuilder MapDeleteRating(this IEndpointRouteBuilder app)
         {
-            app.MapDelete(ApiEndpoints.Movies.DeleteRating, async (
+            app.MapDelete(ApiEndpoints.Movies.DeleteRating, async 
+            (
                 Guid id, 
                 HttpContext httpContext, 
                 IRatingService ratingService, 
@@ -21,7 +22,9 @@ namespace Movies.Api.Endpoints.Ratings
                 var success = await ratingService.DeleteRatingAsync(id, userId!.Value, cancellationToken);
 
                 return success ? TypedResults.Ok() : Results.NotFound();
-            }).WithName(Name);
+            })
+                .WithName(Name)
+                .RequireAuthorization();
 
             return app;
         }
