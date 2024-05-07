@@ -35,7 +35,8 @@ namespace Movies.Api.Endpoints.Movies
                 .Produces<MoviesResponse>(StatusCodes.Status200OK)
                 .Produces<ValidationFailureResponse>(StatusCodes.Status400BadRequest)
                 .WithApiVersionSet(ApiVersioning.VersionSet)
-                .HasApiVersion(1.0);
+                .HasApiVersion(1.0)
+                .CacheOutput("MoviesCache");
 
             app.MapGet(ApiEndpoints.Movies.GetAll, async (
                 [AsParameters] GetAllMoviesRequest getAllMoviesRequest,
