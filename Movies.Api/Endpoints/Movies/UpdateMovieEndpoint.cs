@@ -3,6 +3,7 @@ using Movies.Api.Auth;
 using Movies.Api.Mapping;
 using Movies.Application.Services;
 using Movies.Contracts.Requests;
+using Movies.Contracts.Responses;
 
 namespace Movies.Api.Endpoints.Movies
 {
@@ -33,7 +34,10 @@ namespace Movies.Api.Endpoints.Movies
                 return updatedMovie is not null ? TypedResults.Ok(movie.ToResponse()) : Results.NotFound();
             })
                 .WithName(Name)
-                .RequireAuthorization(AuthConstants.TrustedMemberPolicyName);
+                .RequireAuthorization(AuthConstants.TrustedMemberPolicyName)
+                .Produces<MovieResponse>(StatusCodes.Status200OK)
+                .Produces<ValidationFailureResponse>(StatusCodes.Status400BadRequest)
+                .Produces(StatusCodes.Status404NotFound);
 
             return app; 
         }

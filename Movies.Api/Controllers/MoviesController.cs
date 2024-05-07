@@ -16,7 +16,7 @@ namespace Movies.Api.Controllers
     [ApiController]
     public class MoviesController : ControllerBase
     {
-        private readonly IMovieService movieService;
+        /*private readonly IMovieService movieService;
         private readonly IOutputCacheStore outputCacheStore;
 
         public MoviesController(IMovieService movieService, IOutputCacheStore outputCacheStore)
@@ -122,6 +122,6 @@ namespace Movies.Api.Controllers
             await outputCacheStore.EvictByTagAsync("movies", cancellationToken);
 
             return deleted ? Ok() : NotFound(); 
-        }
+        }*/
     }
 }

@@ -51,17 +51,15 @@ builder.Services.AddAuthorization(x =>
 });
 
 // Add services to the container.
-builder.Services.AddApiVersioning(options => 
+builder.Services.AddApiVersioning(options =>
 {
     options.DefaultApiVersion = new ApiVersion(1.0);
     options.AssumeDefaultVersionWhenUnspecified = true;
     options.ReportApiVersions = true;
     options.ApiVersionReader = new MediaTypeApiVersionReader("api-version");
-}).AddApiExplorer(options => 
-{
-    options.GroupNameFormat = "'v'V";
-    options.SubstituteApiVersionInUrl = true;
-}).AddMvc();
+}).AddApiExplorer();
+
+builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddHealthChecks()
     .AddCheck<DatabaseHealthCheck>("Database");

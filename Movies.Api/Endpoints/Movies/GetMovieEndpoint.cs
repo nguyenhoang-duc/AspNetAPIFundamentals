@@ -1,6 +1,7 @@
 ﻿using Movies.Api.Auth;
 using Movies.Api.Mapping;
 using Movies.Application.Services;
+using Movies.Contracts.Responses;
 
 namespace Movies.Api.Endpoints.Movies
 {
@@ -19,7 +20,10 @@ namespace Movies.Api.Endpoints.Movies
                                                                 : await movieService.GetBySlugAsync(idOrSlug, userId, token);
 
                 return movie is null ? Results.NotFound() : TypedResults.Ok(movie.ToResponse());
-            }).WithName(Name);
+            })
+                .WithName(Name)
+                .Produces<MovieResponse>(StatusCodes.Status200OK)
+                .Produces(StatusCodes.Status404NotFound);
 
             return app; 
         }

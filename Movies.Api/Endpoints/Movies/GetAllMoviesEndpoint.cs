@@ -2,6 +2,7 @@
 using Movies.Api.Mapping;
 using Movies.Application.Services;
 using Movies.Contracts.Requests;
+using Movies.Contracts.Responses;
 
 namespace Movies.Api.Endpoints.Movies
 {
@@ -20,7 +21,7 @@ namespace Movies.Api.Endpoints.Movies
             {
                 var userId = httpContext.GetUserId();
 
-                var options = getAllMoviesRequest.ToOptions().WithUserId(userId?.Value);
+                var options = getAllMoviesRequest.ToOptions().WithUserId(userId);
 
                 var movies = await movieService.GetAllAsync(options, cancellationToken);
 
@@ -29,7 +30,10 @@ namespace Movies.Api.Endpoints.Movies
                 var response = movies.ToResponse(getAllMoviesRequest.Page.GetValueOrDefault(PagedRequest.DefaultPage), getAllMoviesRequest.PageSize.GetValueOrDefault(PagedRequest.DefaultPageSize), movieCount);
 
                 return TypedResults.Ok(response);
-            }).WithName(Name);
+            })
+                .WithName(Name)
+                .Produces<MoviesResponse>(StatusCodes.Status200OK)
+                .Produces<ValidationFailureResponse>(StatusCodes.Status400BadRequest);
 
             return app;
         }

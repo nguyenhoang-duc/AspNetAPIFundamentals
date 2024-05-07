@@ -13,7 +13,7 @@ namespace Movies.Api.Controllers
     [ApiController]
     public class RatingsController : ControllerBase
     {
-        private readonly IRatingService ratingService;
+        /*private readonly IRatingService ratingService;
 
         public RatingsController(IRatingService ratingService) 
         {
@@ -56,7 +56,7 @@ namespace Movies.Api.Controllers
             var movieRatings = await ratingService.GetRatingsForUserAsync(userId!.Value, cancellationToken);
 
             return Ok(movieRatings.ToResponse()); 
-        }
+        }*/
 
     }
 }

@@ -24,7 +24,9 @@ namespace Movies.Api.Endpoints.Ratings
                 return TypedResults.Ok(movieRatings.ToResponse());
             })
                 .WithName(Name)
-                .RequireAuthorization();  
+                .RequireAuthorization()
+                .Produces(StatusCodes.Status200OK)
+                .Produces(StatusCodes.Status404NotFound);  
 
             return app; 
         }

@@ -25,7 +25,9 @@ namespace Movies.Api.Endpoints.Movies
                 return deleted ? TypedResults.Ok() : Results.NotFound();
             })
                 .WithName(Name)
-                .RequireAuthorization(AuthConstants.AdminUserPolicyName);
+                .RequireAuthorization(AuthConstants.AdminUserPolicyName)
+                .Produces(StatusCodes.Status200OK)
+                .Produces(StatusCodes.Status404NotFound);
 
             return app; 
         }
