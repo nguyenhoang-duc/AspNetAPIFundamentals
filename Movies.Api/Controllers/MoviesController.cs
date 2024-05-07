@@ -88,7 +88,9 @@ namespace Movies.Api.Controllers
 
             var movieCount = await movieService.GetCountAsync(options.Title, options.YearOfRelease, cancellationToken);
 
-            return Ok(movies.ToResponse(getAllMoviesRequest.Page, getAllMoviesRequest.PageSize, movieCount));
+
+        return Ok(movies);
+            //return Ok(movies.ToResponse(getAllMoviesRequest.Page, getAllMoviesRequest.PageSize, movieCount));
         }
          
         [Authorize(AuthConstants.TrustedMemberPolicyName)]

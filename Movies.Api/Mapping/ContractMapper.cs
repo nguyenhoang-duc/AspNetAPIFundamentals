@@ -83,8 +83,8 @@ namespace Movies.Api.Mapping
                 Title = request.Title,
                 SortField = sortField, 
                 SortOrder = sortOrder,
-                Page = request.Page,
-                PageSize = request.PageSize,
+                Page = request.Page.GetValueOrDefault(PagedRequest.DefaultPage),
+                PageSize = request.PageSize.GetValueOrDefault(PagedRequest.DefaultPageSize),
             };
         }
 
