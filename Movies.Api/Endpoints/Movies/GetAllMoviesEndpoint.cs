@@ -31,9 +31,36 @@ namespace Movies.Api.Endpoints.Movies
 
                 return TypedResults.Ok(response);
             })
-                .WithName(Name)
+                .WithName($"{Name}V1")
                 .Produces<MoviesResponse>(StatusCodes.Status200OK)
-                .Produces<ValidationFailureResponse>(StatusCodes.Status400BadRequest);
+                .Produces<ValidationFailureResponse>(StatusCodes.Status400BadRequest)
+                .WithApiVersionSet(ApiVersioning.VersionSet)
+                .HasApiVersion(1.0);
+
+            app.MapGet(ApiEndpoints.Movies.GetAll, async (
+                [AsParameters] GetAllMoviesRequest getAllMoviesRequest,
+                HttpContext httpContext,
+                IMovieService movieService,
+                CancellationToken cancellationToken
+            ) =>
+            {
+                var userId = httpContext.GetUserId();
+
+                var options = getAllMoviesRequest.ToOptions().WithUserId(userId);
+
+                var movies = await movieService.GetAllAsync(options, cancellationToken);
+
+                var movieCount = await movieService.GetCountAsync(options.Title, options.YearOfRelease, cancellationToken);
+
+                var response = movies.ToResponse(getAllMoviesRequest.Page.GetValueOrDefault(PagedRequest.DefaultPage), getAllMoviesRequest.PageSize.GetValueOrDefault(PagedRequest.DefaultPageSize), movieCount);
+
+                return TypedResults.Ok(response);
+            })
+                .WithName($"{Name}V2")
+                .Produces<MoviesResponse>(StatusCodes.Status200OK)
+                .Produces<ValidationFailureResponse>(StatusCodes.Status400BadRequest)
+                .WithApiVersionSet(ApiVersioning.VersionSet)
+                .HasApiVersion(2.0);
 
             return app;
         }
